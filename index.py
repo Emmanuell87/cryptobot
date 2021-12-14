@@ -64,17 +64,26 @@ async def on_ready():
                             await guild.me.add_roles(role_high)
                             await guild.me.remove_roles(role_low)
                             type_arrow = '↗️'
-
-                        await guild.me.edit(nick=crypto['symbol'].upper() + f' {type_arrow} ' + str(crypto['market_data']['current_price']['usd']), color=discord.Color.green())
+                        # print('{:f}'.format(round(crypto['market_data']['current_price']['usd'], DECIMALS)))
+                        # print(round(crypto['market_data']['price_change_24h'], DECIMALS))
+                        # print("{:f}({:f}%)".format(
+                        #     round(crypto['market_data']['price_change_24h'], DECIMALS), 
+                        #     round(crypto['market_data']['price_change_percentage_24h'], DECIMALS)
+                        # ))
+                        # print(round(crypto['market_data']['price_change_24h'], DECIMALS))
+                        await guild.me.edit(nick=crypto['symbol'].upper() + f' {type_arrow} ' + str(round(crypto['market_data']['current_price']['usd'], DECIMALS)))
+                        
                     #cambia la "presence" asignandolo un nombre del cambio del precio en 24h y el cambio del pocentaje en 24h
                     await bot.change_presence(activity=discord.Game(
-                        name = str(round(crypto['market_data']['price_change_24h'], DECIMALS)) +  
-                        f"({str(round(crypto['market_data']['price_change_percentage_24h'], DECIMALS))}%)"
+                        name = 
+                            str(round(crypto['market_data']['price_change_24h'], DECIMALS)) + 
+                            f"({round(crypto['market_data']['price_change_percentage_24h'], DECIMALS)}%)"
                     ))
 
                     #tiempo de espera para volver a actualizar
                 except BaseException as err:
                     print(err)
-                    
+
                 await asyncio.sleep(UPDATE_TIME)
+                    
 bot.run(TOKEN)
